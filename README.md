@@ -36,6 +36,13 @@ Note: the naming and span may change in the near future.
 
 
 ### Running the example (needs maven)
+The example is a self-contained webapp that runs on the jetty server.
     $ cd inplace-image-changer
     $ ./run_example
+    
+### Browser support
+
+* Chrome
+* Firefox
+* Safari - not yet
     
