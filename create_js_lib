@@ -1,0 +1,11 @@
+#!/bin/bash
+file="inplace.image.changer-with.deps"
+echo $file
+joined="lib/$file.js"
+echo $joined
+min="lib/$file.min.js"
+echo $min
+
+coffee --join $joined --compile src/*.coffee
+java -jar tools/yuicompressor-2.4.7.jar -o $min $joined
+
