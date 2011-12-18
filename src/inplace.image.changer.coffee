@@ -1,4 +1,8 @@
 ###
+from: https://github.com/edeustace/inplace-image-changer
+###
+
+###
 Add chrome support for sendAsBinary
 ###
 if !XMLHttpRequest.prototype.sendAsBinary
