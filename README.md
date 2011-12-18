@@ -1,8 +1,11 @@
 ## Introduction
 
-[here's a demo](http://edeustace.com/inplace/)
+
 A jquery plugin that allows you to change images 'in place', aka you click the image and you get a file chooser, and once you've selected something it gets uploaded.
 Inspired by [best_in_place](https://github.com/bernat/best_in_place).
+
+
+[here's a demo](http://edeustace.com/inplace/)
 
 ## Usage
 
