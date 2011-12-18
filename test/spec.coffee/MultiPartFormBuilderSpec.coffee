@@ -29,7 +29,7 @@ describe "Player", ->
     expect(out.indexOf("""#{fileParams[0].data}""") ).toNotBe -1
     
     # normal params
-    expect(out.indexOf("""form-data name='method'""")).toNotBe(-1)
+    expect(out.indexOf("""form-data; name="method" """)).toNotBe(-1)
     # TODO: looks like crlf are being corrupted.
     #expect(out).toEqual expected
     null

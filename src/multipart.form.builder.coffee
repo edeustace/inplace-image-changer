@@ -22,7 +22,6 @@ class @com.ee.MultipartFormBuilder
 
     if params?
       $.each params, (i, val) =>
-        console.log ".."
         if (typeof(val) ) == 'function' 
           val = val()
         output += @buildFormSegment i, val
@@ -39,9 +38,13 @@ class @com.ee.MultipartFormBuilder
     output
 
   buildFormSegment: (key, value ) ->
-    contentDisposition =  """Content-Disposition: form-data name='#{key}'"""
+    contentDisposition = @_buildContentDisposition key 
     @_buildFormSegment contentDisposition, value
   
+  _buildContentDisposition: (name) ->
+    template = """Content-Disposition: form-data; name="${name}" """
+    template.replace "${name}", name
+
   _buildFileContentDisposition: (formName, fileName ) ->
     @template = """Content-Disposition: form-data; name="${formName}"; filename="${fileName}" """
     out = @template.replace "${formName}", formName 
