@@ -1,0 +1,4 @@
+#!/bin/bash
+cd ..
+coffee --compile --output example/src/main/webapp/javascripts/ src/
+coffee --compile --output test/spec/ test/spec/

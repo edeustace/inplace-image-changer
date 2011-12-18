@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ..
+coffee --compile --output example/src/main/webapp/js/ src/
+cd example
+mvn install
+mvn jetty:run
+echo "running server go to: http://localhost:8080"
+
