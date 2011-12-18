@@ -7,6 +7,7 @@
         <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 		    <script type="text/javascript" src="js/multipart.form.builder.js"></script> 
         <script type="text/javascript" src="js/inplace.image.changer.js"></script>
+        <script type="text/javascript" src="http://fgnass.github.com/spin.js/spin.min.js"></script>
         <script type="text/javascript">
           $(document).ready(function(){
 
@@ -16,7 +17,6 @@
               }
 
             $(".inplace_image").inplaceImageChanger({
-                maxFileSizeInKB: 80,
                 onLocalFileTooBig: onLocalFileTooBig
             });
           });
