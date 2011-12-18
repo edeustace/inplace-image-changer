@@ -25,14 +25,22 @@ com.ee || (com.ee = {})
   
 class @com.ee.InplaceImageChanger
 
+  ###
+    Options: 
+      maxFileSizeInKB - the max size of files
+      onLocalFileTooBig - a call back if the file size is too big
+      jsonResponseUrlKey - when reading the json response, it'll use this key to create the img#href
+  ###
   constructor: (element, options) ->
     @$element = $(element)
 
     defaultOptions = 
       jsonResponseUrlKey : "url"
+      maxFileSizeInKB : 400
 
     if options? then @options = $.extend defaultOptions, options else @options = defaultOptions
 
+    console.log "maxfile size: #{@options.maxFileSizeInKB}"
     @_createImageTag @$element.attr('data-original-content')
     @_createFileInput()
 
@@ -72,6 +80,12 @@ class @com.ee.InplaceImageChanger
     null
 
   _onLocalFileLoadEnd: (evt, file) ->
+    
+    if file.size > @options.maxFileSizeInKB * 1024
+      if @options.onLocalFileTooBig?
+        @options.onLocalFileTooBig file.size, @options.maxFileSizeInKB
+      return
+
     console.log "_onLocalFileLoadEnd"
     now = new Date().getTime()
     boundary = "------multipartformboundary#{now}"

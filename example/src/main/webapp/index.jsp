@@ -8,9 +8,18 @@
 		    <script type="text/javascript" src="js/multipart.form.builder.js"></script> 
         <script type="text/javascript" src="js/inplace.image.changer.js"></script>
         <script type="text/javascript">
-            $(document).ready(function(){
-                $(".inplace_image").inplaceImageChanger();
+          $(document).ready(function(){
+
+            var onLocalFileTooBig = function( fileSize, maxSize )
+            {
+              alert('too big: file size: ' + fileSize + ' max: '+ maxSize * 1024 );
+              }
+
+            $(".inplace_image").inplaceImageChanger({
+                maxFileSizeInKB: 80,
+                onLocalFileTooBig: onLocalFileTooBig
             });
+          });
         </script>
     </head>
     
