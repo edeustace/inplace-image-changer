@@ -35,7 +35,6 @@ class @com.ee.InplaceImageChanger
     @$element = $(element)
 
     defaultOptions = 
-      jsonResponseUrlKey : "url"
       maxFileSizeInKB : 400
 
     if options? then @options = $.extend defaultOptions, options else @options = defaultOptions
@@ -46,7 +45,9 @@ class @com.ee.InplaceImageChanger
 
   uploadCompleted: ($element, resultText) ->
     resultObject = $.parseJSON resultText
-    @_createImageTag resultObject[@options.jsonResponseUrlKey]
+    customKey = @$element.attr 'data-custom-response-key'
+    key = if customKey? then customKey else "url" 
+    @_createImageTag resultObject[key]
     @_createFileInput()
 
     if @options.uploadCompleted?
