@@ -5,13 +5,8 @@
         <title>Inplace image changer demo</title>
         <link rel="stylesheet" href="css/styles.css" />
         <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
-		<!-- 
-		<script type="text/javascript" src="js/multipart.form.builder.js"></script> 
+		    <script type="text/javascript" src="js/multipart.form.builder.js"></script> 
         <script type="text/javascript" src="js/inplace.image.changer.js"></script>
-		 -->
-		<!-- 
-		 <script type="text/javascript" src="js/inplace.image.changer-with.min.js"></script> 
-		 -->
         <script type="text/javascript">
             $(document).ready(function(){
                 $(".inplace_image").inplaceImageChanger();

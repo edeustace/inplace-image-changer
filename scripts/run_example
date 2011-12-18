@@ -1,5 +1,6 @@
 #!/bin/bash
-cd ..
+pwd
+mkdir example/src/main/webapp/uploads
 coffee --compile --output example/src/main/webapp/js/ src/
 cd example
 mvn install

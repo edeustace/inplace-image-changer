@@ -1,6 +1,4 @@
 #!/bin/bash
-cd ..
-
 file="inplace.image.changer-with.deps"
 echo $file
 joined="lib/$file.js"

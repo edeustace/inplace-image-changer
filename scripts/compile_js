@@ -1,4 +1,6 @@
 #!/bin/bash
-cd ..
-coffee --compile --output example/src/main/webapp/javascripts/ src/
-coffee --compile --output test/spec/ test/spec/
+echo "compiling src"
+coffee --compile --output example/src/main/webapp/js/ src/
+echo "compiling specs"
+coffee --compile --output test/spec/ test/spec.coffee/
+echo "done"

@@ -22,7 +22,8 @@ class @com.ee.MultipartFormBuilder
 
     if params?
       $.each params, (i, val) =>
-        if typeof( val == 'function' )
+        console.log ".."
+        if (typeof(val) ) == 'function' 
           val = val()
         output += @buildFormSegment i, val
     

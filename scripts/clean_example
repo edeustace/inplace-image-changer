@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ..
 rm -fr example/src/main/webapp/uploads/*
 rm -f example/src/main/webapp/js/inplace.image.changer.js
 rm -f example/src/main/webapp/js/multipart.form.builder.js
