@@ -17,7 +17,30 @@
               }
 
             $(".inplace_image").inplaceImageChanger({
-                onLocalFileTooBig: onLocalFileTooBig
+                onLocalFileTooBig: onLocalFileTooBig, 
+                onLoadStart : function( $element ){
+                  var w = $element.find('img').width();
+                  var h = $element.find('img').height();
+                  var box = "<div style='background-color: #ff00ff; width: "+w+"px; height: "+ h +"px;'>";
+
+                  var opts = {
+                      lines: 14, 
+                      length: 7, 
+                      width: 4, 
+                      radius: 10, 
+                      color: '#fff', 
+                      speed: 1, 
+                      trail: 60, 
+                      shadow: false 
+                      };
+                   $element.html( box );
+                   var target = $element.find('div')[0];
+
+                   if( typeof(Spinner) != "undefined")
+                   {
+                      new Spinner(opts).spin(target);
+                   }
+                }
             });
           });
         </script>
