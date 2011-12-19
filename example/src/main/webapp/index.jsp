@@ -11,14 +11,9 @@
         <script type="text/javascript">
           $(document).ready(function(){
 
-            var onLocalFileTooBig = function( fileSize, maxSize )
-            {
-              alert('too big: file size: ' + fileSize + ' max: '+ maxSize * 1024 );
-              }
-
             $(".inplace_image").inplaceImageChanger({
-                onLocalFileTooBig: onLocalFileTooBig, 
-                onLoadStart : function( $element ){
+                  onLocalFileTooBig: function( fileSize, maxSize){ alert('too big')}, 
+                  onLoadStart : function( $element ){
                   var w = $element.find('img').width();
                   var h = $element.find('img').height();
                   var box = "<div style='background-color: #ff00ff; width: "+w+"px; height: "+ h +"px;'>";
@@ -50,16 +45,11 @@
 		<header>
 			<h1>Inplace Image changer example, click on the image to upload a new one</h1>
 		</header>
-    <div id="dropbox">
 
-      <span class="inplace_image"
-        data-original-content="img/smiley.png"
-        data-form-name="image"
-        data-url="/example/UploadImage">
-      </span>
-		</div>
-    <footer>
-    </footer>
+      <img class="inplace_image"
+        href="img/smiley.png"
+        form-name="image"
+        form-url="/example/UploadImage"/>
     </body>
 </html>
 

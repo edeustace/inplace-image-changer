@@ -19,21 +19,22 @@ Inspired by [best_in_place](https://github.com/bernat/best_in_place).
     ...
     
     <body>
-      
-      <span class="inplace_image"
-        data-original-content="img/smiley.png"
-        data-form-name="image"
-        data-url="/example/UploadImage">
-      </span>
+      <img class="inplace_image"
+        href="img/smiley.png"
+        form-name="image"
+        form-url="/example/UploadImage"/>
     </bod>
     
-The element that you create should be a span and requires the following 3 attributes:
+The img tag requires the following 3 attributes:
 
-* data-original-content: the url to the initial image to show
-* data-form-name: the name of the image within the post request
-* data-url: the url to post the image to
+* href: the url to the initial image to show
+* form-name: the name of the image within the post request
+* form-url: the url to post the image to
 
-Note: the naming and span may change in the near future.
+The following attribute is optional: 
+
+* custom-response-key: the key to use when reading the json response. If you use the default handler it expects the JSON response to look like: 
+    { "url" : "myNewImge.png", ...}
 
 ### building from source (java and coffeescript on your path)
     $ cd inplace-image-changer

@@ -29,8 +29,8 @@ class @com.ee.InplaceImageChanger
       onLocalFileTooBig - a call back if the file size is too big
       jsonResponseUrlKey - when reading the json response, it'll use this key to create the img#href
   ###
-  constructor: (element, options) ->
-    @$element = $(element)
+  constructor: (imgElement, options) ->
+    #@$element = $(element)
 
     empty = ->
 
@@ -43,8 +43,23 @@ class @com.ee.InplaceImageChanger
 
     if options? then @options = $.extend defaultOptions, options else @options = defaultOptions
 
-    @_createImageTag @$element.attr('data-original-content')
+    @$element = $("""<span></span>""")
+    @$element.insertAfter $(imgElement)
+    @_copyAttributes $(imgElement), @$element
+    $(imgElement).remove()
+    
+    @_createImageTag @$element.attr 'href'
     @_createFileInput()
+
+  _copyAttributes: ($sourceNode, $destNode) ->
+    attributes = $sourceNode[0].attributes
+    
+    for index, attr of attributes
+      if !attr.name? || !attr.nodeValue? 
+        continue
+      console.log "#{attr.name} : #{attr.nodeValue}"
+      $destNode.attr(attr.name, attr.nodeValue)
+    null
 
   _createImageTag: (url)->
     imageTag = "<img style='cursor:pointer' src='#{url}'/>"
@@ -57,7 +72,7 @@ class @com.ee.InplaceImageChanger
     fileInput = """<input 
             style="visibility: hidden; width: 1px; height: 1px;" 
             type="file" 
-            name="#{@$element.attr('data-form-name')}">
+            name="#{@$element.attr('form-name')}">
      </input>"""
     @$element.append fileInput
     @$element.find('input').change (event) => @_handleFileSelect event
@@ -91,7 +106,7 @@ class @com.ee.InplaceImageChanger
     xhr.upload.currentProgress = 0;
     xhr.upload.startData = 0;
     xhr.upload.addEventListener "progress", ((e) => @_progress e), false
-    xhr.open "POST", @$element.attr('data-url'), true
+    xhr.open "POST", @$element.attr('form-url'), true
 
     xhr.setRequestHeader 'content-type', "multipart/form-data; boundary=#{boundary}"
     xhr.setRequestHeader "Accept", "application/json"
@@ -110,7 +125,7 @@ class @com.ee.InplaceImageChanger
     fileParams = [
       file : file
       data : fileBinaryData
-      paramName : @$element.attr 'data-form-name'
+      paramName : @$element.attr 'form-name'
     ]
     formBuilder.buildMultipartFormBody params, fileParams, boundary
 
@@ -133,7 +148,7 @@ class @com.ee.InplaceImageChanger
   ###
   onUploadComplete: ($element, resultText) ->
     resultObject = $.parseJSON resultText
-    customKey = @$element.attr 'data-custom-response-key'
+    customKey = @$element.attr 'custom-response-key'
     key = if customKey? then customKey else "url" 
     @_createImageTag resultObject[key]
     @_createFileInput()
