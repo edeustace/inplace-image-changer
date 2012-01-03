@@ -56,7 +56,7 @@
       <div>Won't auto save because no form-url is specified</div>
       <img class="inplace_image"
         href="img/smiley.png">
-
+      
     </body>
 </html>
 
