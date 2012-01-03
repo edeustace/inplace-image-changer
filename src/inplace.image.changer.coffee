@@ -19,66 +19,15 @@ window.com || (window.com = {})
 com.ee || (com.ee = {})
 
 ###
+Performs the upload of the image.
 ###
-  
-class @com.ee.InplaceImageChanger
 
-  ###
-    Options: 
-      maxFileSizeInKB - the max size of files
-      onLocalFileTooBig - a call back if the file size is too big
-      jsonResponseUrlKey - when reading the json response, it'll use this key to create the img#href
-  ###
-  constructor: (imgElement, options) ->
-    #@$element = $(element)
+class @com.ee.InplaceImageUploader
+  constructor: (imageChanger) ->
+    @options = imageChanger.options
+    @$element = imageChanger.$element
 
-    empty = ->
-
-    defaultOptions = 
-      maxFileSizeInKB : 2000
-      onProgressUpdate : empty
-      onLoadStart : empty
-      onLocalFileTooBig : empty
-      onUploadComplete : ($element, result) => @onUploadComplete($element, result)
-
-    if options? then @options = $.extend defaultOptions, options else @options = defaultOptions
-
-    @$element = $("""<span></span>""")
-    @$element.insertAfter $(imgElement)
-    @_copyAttributes $(imgElement), @$element
-    $(imgElement).remove()
-    
-    @_createImageTag @$element.attr 'href'
-    @_createFileInput()
-
-  _copyAttributes: ($sourceNode, $destNode) ->
-    attributes = $sourceNode[0].attributes
-    
-    for index, attr of attributes
-      if !attr.name? || !attr.nodeValue? 
-        continue
-      console.log "#{attr.name} : #{attr.nodeValue}"
-      $destNode.attr(attr.name, attr.nodeValue)
-    null
-
-  _createImageTag: (url)->
-    imageTag = "<img style='cursor:pointer' src='#{url}'/>"
-    @$element.html imageTag
-    @$element.find('img').click (event) =>
-      @$element.find('input').trigger 'click' 
-    null
-  
-  _createFileInput: ->
-    fileInput = """<input 
-            style="visibility: hidden; width: 1px; height: 1px;" 
-            type="file" 
-            name="#{@$element.attr('form-name')}">
-     </input>"""
-    @$element.append fileInput
-    @$element.find('input').change (event) => @_handleFileSelect event
-    null
-  
-  _handleFileSelect: (evt)->
+  handleFileSelect: (evt)->
     files = evt.target.files
     @file = evt.target.files[0]
     reader = new FileReader()
@@ -128,8 +77,7 @@ class @com.ee.InplaceImageChanger
       paramName : @$element.attr 'form-name'
     ]
     formBuilder.buildMultipartFormBody params, fileParams, boundary
-
- 
+  
   _progress: (event) ->
     if !event.lengthComputable
       return 
@@ -143,6 +91,71 @@ class @com.ee.InplaceImageChanger
     @options.onProgressUpdate @$element, @file, @currentProgress
     null
 
+  
+class @com.ee.InplaceImageChanger
+
+  ###
+    Options: 
+      maxFileSizeInKB - the max size of files
+      onLocalFileTooBig - a call back if the file size is too big
+      jsonResponseUrlKey - when reading the json response, it'll use this key to create the img#href
+  ###
+  constructor: (imgElement, options) ->
+    #@$element = $(element)
+
+    empty = ->
+
+    defaultOptions = 
+      maxFileSizeInKB : 2000
+      onProgressUpdate : empty
+      onLoadStart : empty
+      onLocalFileTooBig : empty
+      onUploadComplete : ($element, result) => @onUploadComplete($element, result)
+
+    if options? then @options = $.extend defaultOptions, options else @options = defaultOptions
+
+    @$element = $("""<span></span>""")
+    @$element.insertAfter $(imgElement)
+    @_copyAttributes $(imgElement), @$element
+
+    @uploader = new com.ee.InplaceImageUploader(@) if typeof( @$element.attr('form-url') ) != "undefined" 
+    
+    #console.log "uploader added? #{@uploader?}"
+
+    $(imgElement).remove()
+    
+    @_createImageTag @$element.attr 'href'
+    @_createFileInput()
+
+  _copyAttributes: ($sourceNode, $destNode) ->
+    attributes = $sourceNode[0].attributes
+    
+    for index, attr of attributes
+      if !attr.name? || !attr.nodeValue? 
+        continue
+      console.log "#{attr.name} : #{attr.nodeValue}"
+      $destNode.attr(attr.name, attr.nodeValue)
+    null
+
+  _createImageTag: (url)->
+    imageTag = "<img style='cursor:pointer' src='#{url}'/>"
+    @$element.html imageTag
+    @$element.find('img').click (event) =>
+      @$element.find('input').trigger 'click' 
+    null
+  
+  _createFileInput: ->
+    fileInput = """<input 
+            style="visibility: hidden; width: 1px; height: 1px;" 
+            type="file" 
+            name="#{@$element.attr('form-name')}">
+     </input>"""
+    @$element.append fileInput
+
+    if @uploader?
+      @$element.find('input').change (event) => @uploader.handleFileSelect event
+    null
+  
   ###
   Default upload complete handler
   ###
