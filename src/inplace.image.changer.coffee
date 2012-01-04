@@ -18,6 +18,46 @@ if !XMLHttpRequest.prototype.sendAsBinary
 window.com || (window.com = {})
 com.ee || (com.ee = {})
 
+class @com.ee.FileUploader
+  constructor: (@file, @binaryData, @url, @name, @options) ->
+    now = new Date().getTime()
+    boundary = "------multipartformboundary#{now}"
+
+    formBody = @_buildMultipartFormBody @file, @binaryData, boundary
+    
+    xhr = new XMLHttpRequest()
+    xhr.upload.index = 0
+    xhr.upload.file = @file
+    xhr.upload.downloadStartTime = now;
+    xhr.upload.currentStart = now;
+    xhr.upload.currentProgress = 0;
+    xhr.upload.startData = 0;
+    #xhr.upload.addEventListener "progress", ((e) => @_progress e), false
+    xhr.open "POST", @url, true
+
+    xhr.setRequestHeader 'content-type', "multipart/form-data; boundary=#{boundary}"
+    xhr.setRequestHeader "Accept", "application/json"
+    xhr.sendAsBinary formBody
+    
+    if @options.onLoadStart? 
+      @options.onLoadStart()
+
+    xhr.onload = =>
+      if @options.onUploadComplete?
+        @options.onUploadComplete xhr.responseText
+
+  _buildMultipartFormBody: (file, fileBinaryData, boundary) ->
+    formBuilder = new com.ee.MultipartFormBuilder(boundary)
+    params = @options.additionalData
+    fileParams = [
+      file : file
+      data : fileBinaryData
+      paramName : @name
+    ]
+    formBuilder.buildMultipartFormBody params, fileParams, boundary
+
+
+
 ###
 Performs the upload of the image.
 ###
@@ -41,43 +81,22 @@ class @com.ee.InplaceImageUploader
       if @options.onLocalFileTooBig?
         @options.onLocalFileTooBig @file.size, @options.maxFileSizeInKB
       return
-
-    now = new Date().getTime()
-    boundary = "------multipartformboundary#{now}"
-
-    formBody = @_buildMultipartFormBody @file, evt.target.result, boundary
     
-    xhr = new XMLHttpRequest()
-    xhr.upload.index = 0
-    xhr.upload.file = @file
-    xhr.upload.downloadStartTime = now;
-    xhr.upload.currentStart = now;
-    xhr.upload.currentProgress = 0;
-    xhr.upload.startData = 0;
-    xhr.upload.addEventListener "progress", ((e) => @_progress e), false
-    xhr.open "POST", @$element.attr('form-url'), true
+    url = @$element.attr('form-url')
+    name = @$element.attr('form-name')
 
-    xhr.setRequestHeader 'content-type', "multipart/form-data; boundary=#{boundary}"
-    xhr.setRequestHeader "Accept", "application/json"
-    xhr.sendAsBinary formBody
+    options = 
+      onLoadStart : =>
+        @options.onLoadStart @$element
+      onUploadComplete : (responseText) =>
+        @options.onUploadComplete @$element, responseText
+      additionalData : @options.data
+
+    uploader = new com.ee.FileUploader @file, evt.target.result, url, name, options  
     
-    @options.onLoadStart @$element
-
-    xhr.onload = =>
-      @options.onUploadComplete @$element, xhr.responseText
- 
     null
 
-  _buildMultipartFormBody: (file, fileBinaryData, boundary) ->
-    formBuilder = new com.ee.MultipartFormBuilder(boundary)
-    params = @options.data
-    fileParams = [
-      file : file
-      data : fileBinaryData
-      paramName : @$element.attr 'form-name'
-    ]
-    formBuilder.buildMultipartFormBody params, fileParams, boundary
-  
+   
   _progress: (event) ->
     if !event.lengthComputable
       return 
