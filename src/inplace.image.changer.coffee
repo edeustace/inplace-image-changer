@@ -152,7 +152,7 @@ class @com.ee.InplaceImageChanger
     for index, attr of attributes
       if !attr.name? || !attr.nodeValue? 
         continue
-      console.log "#{attr.name} : #{attr.nodeValue}"
+      #console.log "#{attr.name} : #{attr.nodeValue}"
       $destNode.attr(attr.name, attr.nodeValue)
     null
 
