@@ -20,7 +20,7 @@ Inspired by [best_in_place](https://github.com/bernat/best_in_place).
     
     <body>
       <img class="inplace_image"
-        href="img/smiley.png"
+        src="img/smiley.png"
         form-name="image"
         form-url="/example/UploadImage"/>
     </bod>
