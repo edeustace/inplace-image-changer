@@ -143,8 +143,15 @@ class @com.ee.InplaceImageChanger
 
     $(imgElement).remove()
     
-    @_createImageTag @$element.attr 'href'
+    @_createImageTag @$element.attr 'src'
     @_createFileInput()
+    @
+
+  ###
+  Update the src of the clickable image
+  ###
+  updateImageSrc: (src) ->
+     @$element.find('img').attr 'src', src
 
   _copyAttributes: ($sourceNode, $destNode) ->
     attributes = $sourceNode[0].attributes
